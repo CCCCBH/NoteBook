@@ -12,7 +12,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             + "id integer primary key autoincrement,"
             + "time text,"
             + "content text,"
-            + "last_time timestamp not null default CURRENT_TIMESTAMP)";
+            + "last_time timestamp not null default (datetime('now','localtime')))";
 
     public MyDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
