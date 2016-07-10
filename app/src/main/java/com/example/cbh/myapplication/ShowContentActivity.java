@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,16 @@ public class ShowContentActivity extends AppCompatActivity {
         textView_content.setText(content);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(ShowContentActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        return super.onKeyDown(keyCode, keyEvent);
+    }
+
     public void click_edit_bt(View view) {
         Intent intent = getIntent();
         String time = intent.getStringExtra("time");
@@ -52,7 +63,6 @@ public class ShowContentActivity extends AppCompatActivity {
         Toast.makeText(ShowContentActivity.this, "Delete succeeded", Toast.LENGTH_LONG).show();
         intent = new Intent(ShowContentActivity.this, MainActivity.class);
         startActivity(intent);
-        MainActivity.instance.finish();
         finish();
     }
 }

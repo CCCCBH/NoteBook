@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -29,6 +30,16 @@ public class ContentActivity extends AppCompatActivity {
         editText1 = (EditText) findViewById(R.id.set_time);
         editText2 = (EditText) findViewById(R.id.set_content);
         showNow();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(ContentActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        return super.onKeyDown(keyCode, keyEvent);
     }
 
     public static void showNow() {
@@ -78,6 +89,7 @@ public class ContentActivity extends AppCompatActivity {
         datePickerDialogFragment.show(fragmentManager, "datePicker");
     }
 
+
     public void click_ok(View view) {
         dbHelper = new MyDatabaseHelper(this, "List.db", null, 1);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -86,9 +98,10 @@ public class ContentActivity extends AppCompatActivity {
         values.put("content", editText2.getText().toString());
         db.insert("List", null, values);
         values.clear();
-        Intent intent = new Intent(ContentActivity.this, MainActivity.class);
+        Intent intent = new Intent(ContentActivity.this, ShowContentActivity.class);
+        intent.putExtra("time", editText1.getText().toString());
+        intent.putExtra("content", editText2.getText().toString());
         startActivity(intent);
-        MainActivity.instance.finish();
         finish();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cbh.myapplication;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -18,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class UpdateContentActivity extends AppCompatActivity {
+    public static Activity instance = null;
     private static EditText editText1;
     private static EditText editText2;
     private static int mYear, mMonth, mDay;
@@ -29,6 +31,7 @@ public class UpdateContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_content);
         getSupportActionBar().hide();
+        instance = this;
         editText1 = (EditText) findViewById(R.id.update_time);
         editText2 = (EditText) findViewById(R.id.update_content);
         Intent intent = getIntent();
@@ -39,6 +42,7 @@ public class UpdateContentActivity extends AppCompatActivity {
         editText2.setText(content);
         showNow();
     }
+
 
     public static void showNow() {
         Calendar calendar = Calendar.getInstance();
@@ -88,6 +92,7 @@ public class UpdateContentActivity extends AppCompatActivity {
     }
 
     public void click_update(View view) {
+
         dbHelper = new MyDatabaseHelper(this, "List.db", null, 1);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -99,10 +104,11 @@ public class UpdateContentActivity extends AppCompatActivity {
         values.put("last_time", last_time);
         String[] id_use = {String.valueOf(id)};
         db.update("List", values, "id=?", id_use);
-        Intent intent = new Intent(UpdateContentActivity.this, MainActivity.class);
-        startActivity(intent);
-        MainActivity.instance.finish();
+        Intent intent = new Intent(UpdateContentActivity.this, ShowContentActivity.class);
+        intent.putExtra("time", editText1.getText().toString());
+        intent.putExtra("content", editText2.getText().toString());
         ShowContentActivity.instance.finish();
+        startActivity(intent);
         finish();
     }
 }
